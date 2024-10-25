@@ -32,39 +32,6 @@
             margin-bottom: 20px;
         }
 
-        .media-display {
-            width: 100%;
-            height: 300px;
-            background-color: #F0F0F0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .media-display img, .media-display video, .media-display audio {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        .sidebar {
-            position: fixed;
-            right: 20px;
-            top: 20px;
-            background-color: #333;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .sidebar h2 {
-            font-size: 18px;
-        }
-
-        .team-score {
-            margin: 10px 0;
-        }
-
         .error-message {
             color: red;
             font-weight: bold;
@@ -82,11 +49,6 @@
             <!-- The question from the question bank will be displayed here -->
         </div>
 
-        <!-- Media Display (Optional) -->
-        <div class="media-display" id="media-display">
-            <!-- Media (image, video, audio) related to the question will be displayed here -->
-        </div>
-
         <!-- Error Message -->
         <div id="error-message" class="error-message"></div>
 
@@ -94,51 +56,42 @@
         <button id="show-result" onclick="goToResultPage()">Show Result</button>
     </div>
 
-    <!-- Sidebar for team scores -->
-    <div class="sidebar">
-        <h2>Scores</h2>
-        <div class="team-score" id="team1-score"></div>
-        <div class="team-score" id="team2-score"></div>
-    </div>
-
     <script>
+        // URL of your JSON file hosted on GitHub Pages
+        const jsonUrl = 'https://abduh3131.github.io/BrainFreeze/questions.json'; 
+
         // Retrieve category and value from localStorage
         const category = localStorage.getItem('selectedCategory');
         const value = localStorage.getItem('selectedValue');
 
-        // Retrieve teams and scores from local storage
-        const teams = JSON.parse(localStorage.getItem('teams'));
+        // Format the key to match the structure in the JSON file
+        const key = `${category.toLowerCase()}${value}`;
 
-        // Function to load a random question from the corresponding text file
+        // Fetch the JSON file from GitHub Pages
         async function loadQuestion() {
-            const fileName = `${category}${value}.txt`; // e.g., Cars200.txt
             const errorMessage = document.getElementById('error-message');
-            
             try {
-                // Fetch the text file
-                const response = await fetch(fileName);
+                const response = await fetch(jsonUrl);
                 if (!response.ok) {
-                    throw new Error(`Could not load file: ${fileName}`);
+                    throw new Error('Network response was not ok');
                 }
-                const questions = await response.text();
+                const questionBank = await response.json();
 
-                // Parse the questions and pick one randomly
-                const questionArray = questions.split('\n').filter(line => line.trim() !== ''); // Split by line
-                const randomQuestion = questionArray[Math.floor(Math.random() * questionArray.length)];
-                document.getElementById('question-text').textContent = randomQuestion;
-
+                // Check if the key exists in the JSON and load a random question
+                if (questionBank[key] && questionBank[key].length > 0) {
+                    const randomQuestion = questionBank[key][Math.floor(Math.random() * questionBank[key].length)];
+                    document.getElementById('question-text').textContent = randomQuestion;
+                } else {
+                    document.getElementById('question-text').textContent = 'No questions available for this category and value.';
+                }
             } catch (error) {
                 console.error("Error loading question:", error);
-                errorMessage.textContent = `Error: ${error.message}. Make sure the file ${fileName} exists and is accessible.`;
+                errorMessage.textContent = `Error loading questions: ${error.message}`;
             }
         }
 
         // Call the function to load the question when the page loads
         loadQuestion();
-
-        // Display current scores
-        document.getElementById('team1-score').textContent = `${teams[0].name}: ${teams[0].score}`;
-        document.getElementById('team2-score').textContent = `${teams[1].name}: ${teams[1].score}`;
 
         // Function to navigate to result page
         function goToResultPage() {
