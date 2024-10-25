@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Categories</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #FFD700;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1200px; /* Ensure the container is wide enough */
+            padding: 20px;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            table-layout: fixed; /* Ensures equal width columns */
+            border-collapse: separate;
+            border-spacing: 20px; /* Adds space between the cells */
+        }
+
+        td {
+            width: 20%; /* Each cell will take 1/5th of the row */
+        }
+
+        /* Category Box Styling */
+        .category-box {
+            width: 100%;
+            height: 140px;
+            background-color: #00BFFF;
+            color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .category-box img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover; /* Ensures the image fits within the square */
+            margin-bottom: 5px;
+        }
+
+        .category-box span {
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        .category-box.selected {
+            background-color: #FFD700;
+            color: black;
+        }
+
+        .category-box.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Begin Game Button Styling */
+        .start-game {
+            margin-top: 30px;
+        }
+
+        .start-game button {
+            padding: 15px 30px;
+            background-color: #00BFFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .start-game button:hover {
+            background-color: #1E90FF;
+        }
+
+        .start-game button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Random Selection Button Styling */
+        .random-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .random-button:hover {
+            background-color: #4682B4;
+        }
+
+        /* Team Input */
+        .team-input-container {
+            margin-top: 20px;
+        }
+
+        .team-input {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            width: 50%;
+            margin: 10px auto;
+        }
+
+        .team-input input {
+            width: 45%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select up to 6 Categories</h1>
+        <table>
+            <tr>
+                <td><div class="category-box" data-id="1"><img src="https://via.placeholder.com/80" alt="History"><span>History</span></div></td>
+                <td><div class="category-box" data-id="2"><img src="https://via.placeholder.com/80" alt="Science"><span>Science</span></div></td>
+                <td><div class="category-box" data-id="3"><img src="https://via.placeholder.com/80" alt="Geography"><span>Geography</span></div></td>
+                <td><div class="category-box" data-id="4"><img src="https://via.placeholder.com/80" alt="Music"><span>Music</span></div></td>
+                <td><div class="category-box" data-id="5"><img src="https://via.placeholder.com/80" alt="Movies"><span>Movies</span></div></td>
+            </tr>
+            <tr>
+                <td><div class="category-box" data-id="6"><img src="https://via.placeholder.com/80" alt="Sports"><span>Sports</span></div></td>
+                <td><div class="category-box" data-id="7"><img src="https://via.placeholder.com/80" alt="Technology"><span>Technology</span></div></td>
+                <td><div class="category-box" data-id="8"><img src="https://via.placeholder.com/80" alt="Art"><span>Art</span></div></td>
+                <td><div class="category-box" data-id="9"><img src="https://via.placeholder.com/80" alt="Math"><span>Math</span></div></td>
+                <td><div class="category-box" data-id="10"><img src="https://via.placeholder.com/80" alt="Animals"><span>Animals</span></div></td>
+            </tr>
+            <tr>
+                <td><div class="category-box" data-id="11"><img src="https://via.placeholder.com/80" alt="Literature"><span>Literature</span></div></td>
+                <td><div class="category-box" data-id="12"><img src="https://via.placeholder.com/80" alt="Space"><span>Space</span></div></td>
+                <td><div class="category-box" data-id="13"><img src="https://via.placeholder.com/80" alt="Politics"><span>Politics</span></div></td>
+                <td><div class="category-box" data-id="14"><img src="https://via.placeholder.com/80" alt="Cooking"><span>Cooking</span></div></td>
+                <td><div class="category-box" data-id="15"><img src="https://via.placeholder.com/80" alt="Fashion"><span>Fashion</span></div></td>
+            </tr>
+            <tr>
+                <td><div class="category-box" data-id="16"><img src="https://via.placeholder.com/80" alt="Travel"><span>Travel</span></div></td>
+                <td><div class="category-box" data-id="17"><img src="https://via.placeholder.com/80" alt="Games"><span>Games</span></div></td>
+                <td><div class="category-box" data-id="18"><img src="https://via.placeholder.com/80" alt="Cars"><span>Cars</span></div></td>
+                <td><div class="category-box" data-id="19"><img src="https://via.placeholder.com/80" alt="Nature"><span>Nature</span></div></td>
+                <td><div class="category-box" data-id="20"><img src="https://via.placeholder.com/80" alt="Mythology"><span>Mythology</span></div></td>
+            </tr>
+        </table>
+
+        <!-- Team Inputs -->
+        <div class="team-input-container">
+            <div class="team-input">
+                <input type="text" id="team1" placeholder="Team 1 Name">
+                <input type="text" id="team2" placeholder="Team 2 Name">
+            </div>
+        </div>
+
+        <!-- Begin Game Button -->
+        <div class="start-game">
+            <button id="beginGame" disabled>Begin Game</button>
+        </div>
+
+        <!-- Random Selection Button -->
+        <div class="start-game">
+            <button id="randomSelection" class="random-button">Random Select Remaining</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedCount = 0;
+        const maxSelections = 6;
+        const beginGameButton = document.getElementById('beginGame');
+        const randomButton = document.getElementById('randomSelection');
+
+        const selectedCategories = [];
+        const team1Input = document.getElementById('team1');
+        const team2Input = document.getElementById('team2');
+
+        // Add click event listener to all category boxes
+        const boxes = document.querySelectorAll('.category-box');
+        boxes.forEach(box => {
+            box.addEventListener('click', function () {
+                const category = this.querySelector('span').textContent;
+
+                if (!this.classList.contains('selected')) {
+                    if (selectedCount < maxSelections) {
+                        this.classList.add('selected');
+                        selectedCategories.push(category);
+                        selectedCount++;
+                    }
+                } else {
+                    this.classList.remove('selected');
+                    const index = selectedCategories.indexOf(category);
+                    if (index > -1) {
+                        selectedCategories.splice(index, 1);
+                    }
+                    selectedCount--;
+                }
+
+                beginGameButton.disabled = selectedCount !== maxSelections;
+            });
+        });
+
+        // Random Selection Button to fill remaining categories
+        randomButton.addEventListener('click', () => {
+            const remainingSelections = maxSelections - selectedCount;
+            if (remainingSelections <= 0) return; // No need to randomly select if already 6
+
+            let unselectedBoxes = Array.from(boxes).filter(box => !box.classList.contains('selected'));
+            unselectedBoxes.sort(() => 0.5 - Math.random()); // Shuffle categories
+            unselectedBoxes.slice(0, remainingSelections).forEach(box => {
+                box.classList.add('selected');
+                selectedCategories.push(box.querySelector('span').textContent);
+                selectedCount++;
+            });
+
+            beginGameButton.disabled = selectedCount !== maxSelections;
+        });
+
+        // When "Begin Game" is clicked, store the data and navigate to the lobby page
+        beginGameButton.addEventListener('click', function () {
+            // Save the selected categories and teams in local storage
+            const team1 = team1Input.value || 'Team 1';
+            const team2 = team2Input.value || 'Team 2';
+            const teams = [
+                { name: team1, score: 0 },
+                { name: team2, score: 0 }
+            ];
+
+            localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
+            localStorage.setItem('teams', JSON.stringify(teams));
+            localStorage.setItem('currentTeamIndex', 0); // Start with team 1's turn
+
+            // Navigate to the lobby page
+            window.location.href = 'lobby.html';
+        });
+    </script>
+</body>
+</html>

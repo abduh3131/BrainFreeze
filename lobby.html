@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Lobby</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #FFD700;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Category Table */
+        table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: separate;
+            border-spacing: 20px;
+        }
+
+        td {
+            width: 33.33%; /* 3 columns */
+        }
+
+        /* Category Box */
+        .category-box {
+            background-color: #00BFFF;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .category-box img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .category-box span {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .question-button {
+            width: 100px;
+            margin: 5px;
+            padding: 10px;
+            background-color: #FFD700;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .question-button:hover {
+            background-color: #FFA500;
+        }
+
+        /* Hotbar for teams and scores */
+        .hotbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+        }
+
+        .team span {
+            margin-right: 10px;
+        }
+
+        .team button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            background-color: #FFD700;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .team button:hover {
+            background-color: #FFA500;
+        }
+
+        .current-turn {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Game Lobby</h1>
+
+    <div class="container">
+        <!-- Categories displayed in 3 columns and 2 rows -->
+        <table id="category-table">
+            <tr>
+                <td></td><td></td><td></td> <!-- First row -->
+            </tr>
+            <tr>
+                <td></td><td></td><td></td> <!-- Second row -->
+            </tr>
+        </table>
+    </div>
+
+    <!-- Hotbar -->
+    <div class="hotbar" id="hotbar">
+        <!-- Team scores and current turn will be dynamically inserted -->
+    </div>
+
+    <script>
+        // Retrieve the selected categories and teams from local storage
+        const selectedCategories = JSON.parse(localStorage.getItem('selectedCategories'));
+        const teams = JSON.parse(localStorage.getItem('teams'));
+        let currentTeamIndex = parseInt(localStorage.getItem('currentTeamIndex'));
+
+        const categoryTable = document.getElementById('category-table');
+        const hotbar = document.getElementById('hotbar');
+
+        // Question values (200, 400, 600)
+        const questionValues = [200, 400, 600];
+
+        // Function to create category boxes and question buttons
+        function createCategoryBoxes() {
+            selectedCategories.forEach((category, index) => {
+                const rowIndex = Math.floor(index / 3);
+                const colIndex = index % 3;
+
+                const td = categoryTable.rows[rowIndex].cells[colIndex];
+                
+                const categoryBox = document.createElement('div');
+                categoryBox.classList.add('category-box');
+
+                const categoryImg = document.createElement('img');
+                categoryImg.src = 'https://via.placeholder.com/100'; // Placeholder image
+                const categoryLabel = document.createElement('span');
+                categoryLabel.textContent = category;
+
+                const questionContainer = document.createElement('div');
+                questionValues.forEach(value => {
+                    const questionButton = document.createElement('button');
+                    questionButton.classList.add('question-button');
+                    questionButton.textContent = `${value}`;
+
+                    // Question click event to take user to the question page
+                    questionButton.addEventListener('click', () => goToQuestionPage(category, value));
+
+                    questionContainer.appendChild(questionButton);
+                });
+
+                categoryBox.appendChild(categoryImg);
+                categoryBox.appendChild(categoryLabel);
+                categoryBox.appendChild(questionContainer);
+                td.appendChild(categoryBox);
+            });
+        }
+
+        // Navigate to the question page with category and value
+        function goToQuestionPage(category, value) {
+            // Save the selected category and value in localStorage
+            localStorage.setItem('selectedCategory', category);
+            localStorage.setItem('selectedValue', value);
+
+            // Redirect to the question page
+            window.location.href = 'question.html';
+        }
+
+        // Function to update the hotbar with team names, scores, and current turn
+        function updateHotbar() {
+            hotbar.innerHTML = ''; // Clear previous content
+
+            const currentTurnLabel = document.createElement('div');
+            currentTurnLabel.classList.add('current-turn');
+            currentTurnLabel.textContent = `It's ${teams[currentTeamIndex].name}'s turn`;
+
+            const teamContainer = document.createElement('div');
+            teamContainer.classList.add('team-container');
+
+            teams.forEach((team, index) => {
+                const teamDiv = document.createElement('div');
+                teamDiv.classList.add('team');
+                const teamLabel = document.createElement('span');
+                teamLabel.textContent = `${team.name}: ${team.score}`;
+
+                const incrementButton = document.createElement('button');
+                incrementButton.textContent = '+100';
+                incrementButton.addEventListener('click', () => adjustScore(index, 100));
+
+                const decrementButton = document.createElement('button');
+                decrementButton.textContent = '-100';
+                decrementButton.addEventListener('click', () => adjustScore(index, -100));
+
+                teamDiv.appendChild(teamLabel);
+                teamDiv.appendChild(incrementButton);
+                teamDiv.appendChild(decrementButton);
+                teamContainer.appendChild(teamDiv);
+            });
+
+            hotbar.appendChild(currentTurnLabel);
+            hotbar.appendChild(teamContainer);
+        }
+
+        // Adjust the score of a team and update the display
+        function adjustScore(teamIndex, amount) {
+            teams[teamIndex].score += amount;
+            updateHotbar();
+        }
+
+        // Initialize the page
+        createCategoryBoxes();
+        updateHotbar();
+    </script>
+</body>
+</html>

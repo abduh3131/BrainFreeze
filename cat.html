@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Categories</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #FFD700;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Floating Tally */
+        .floating-tally {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #00BFFF;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            z-index: 1000;
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1200px; /* Ensure the container is wide enough */
+            padding: 20px;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            table-layout: fixed; /* Ensures equal width columns */
+            border-collapse: separate;
+            border-spacing: 20px; /* Adds space between the cells */
+        }
+
+        td {
+            width: 20%; /* Each cell will take 1/5th of the row */
+        }
+
+        /* Category Box Styling */
+        .category-box {
+            width: 100%;
+            height: 140px;
+            background-color: #00BFFF;
+            color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .category-box img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover; /* Ensures the image fits within the square */
+            margin-bottom: 5px;
+        }
+
+        .category-box span {
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        .category-box.selected {
+            background-color: #FFD700;
+            color: black;
+        }
+
+        .category-box.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Begin Game Button Styling */
+        .start-game {
+            margin-top: 30px;
+        }
+
+        .start-game button {
+            padding: 15px 30px;
+            background-color: #00BFFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .start-game button:hover {
+            background-color: #1E90FF;
+        }
+
+        .start-game button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Random Selection Button Styling */
+        .random-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .random-button:hover {
+            background-color: #4682B4;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Tally -->
+    <div class="floating-tally" id="tally">Select 6 more</div>
+
+    <div class="container">
+        <h1>Select up to 6 Categories</h1>
+        <table>
+            <tr>
+                <td><div class="category-box" data-id="1"><img src="https://via.placeholder.com/80" alt="History"><span>History</span></div></td>
+                <td><div class="category-box" data-id="2"><img src="https://via.placeholder.com/80" alt="Science"><span>Science</span></div></td>
+                <td><div class="category-box" data-id="3"><img src="https://via.placeholder.com/80" alt="Geography"><span>Geography</span></div></td>
+                <td><div class="category-box" data-id="4"><img src="https://via.placeholder.com/80" alt="Music"><span>Music</span></div></td>
+                <td><div class="category-box" data-id="5"><img src="https://via.placeholder.com/80" alt="Movies"><span>Movies</span></div></td>
+            </tr>
+            <tr>
+                <td><div class="category-box" data-id="6"><img src="https://via.placeholder.com/80" alt="Sports"><span>Sports</span></div></td>
+                <td><div class="category-box" data-id="7"><img src="https://via.placeholder.com/80" alt="Technology"><span>Technology</span></div></td>
+                <td><div class="category-box" data-id="8"><img src="https://via.placeholder.com/80" alt="Art"><span>Art</span></div></td>
+                <td><div class="category-box" data-id="9"><img src="https://via.placeholder.com/80" alt="Math"><span>Math</span></div></td>
+                <td><div class="category-box" data-id="10"><img src="https://via.placeholder.com/80" alt="Animals"><span>Animals</span></div></td>
+            </tr>
+            <tr>
+                <td><div class="category-box" data-id="11"><img src="https://via.placeholder.com/80" alt="Literature"><span>Literature</span></div></td>
+                <td><div class="category-box" data-id="12"><img src="https://via.placeholder.com/80" alt="Space"><span>Space</span></div></td>
+                <td><div class="category-box" data-id="13"><img src="https://via.placeholder.com/80" alt="Politics"><span>Politics</span></div></td>
+                <td><div class="category-box" data-id="14"><img src="https://via.placeholder.com/80" alt="Cooking"><span>Cooking</span></div></td>
+                <td><div class="category-box" data-id="15"><img src="https://via.placeholder.com/80" alt="Fashion"><span>Fashion</span></div></td>
+            </tr>
+            <tr>
+                <td><div class="category-box" data-id="16"><img src="https://via.placeholder.com/80" alt="Travel"><span>Travel</span></div></td>
+                <td><div class="category-box" data-id="17"><img src="https://via.placeholder.com/80" alt="Games"><span>Games</span></div></td>
+                <td><div class="category-box" data-id="18"><img src="https://via.placeholder.com/80" alt="Cars"><span>Cars</span></div></td>
+                <td><div class="category-box" data-id="19"><img src="https://via.placeholder.com/80" alt="Nature"><span>Nature</span></div></td>
+                <td><div class="category-box" data-id="20"><img src="https://via.placeholder.com/80" alt="Mythology"><span>Mythology</span></div></td>
+            </tr>
+        </table>
+
+        <!-- Begin Game Button -->
+        <div class="start-game">
+            <button id="beginGame" disabled>Begin Game</button>
+        </div>
+
+        <!-- Random Selection Button -->
+        <div class="start-game">
+            <button id="randomSelection" class="random-button">Random Select Remaining</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedCount = 0;
+        const maxSelections = 6;
+        const tally = document.getElementById('tally');
+        const beginGameButton = document.getElementById('beginGame');
+        const randomButton = document.getElementById('randomSelection');
+
+        // Add click event listener to all category boxes
+        const boxes = document.querySelectorAll('.category-box');
+        boxes.forEach(box => {
+            box.addEventListener('click', function () {
+                if (this.classList.contains('disabled')) return;
+
+                if (!this.classList.contains('selected')) {
+                    // Select category
+                    if (selectedCount < maxSelections) {
+                        this.classList.add('selected');
+                        selectedCount++;
+                    }
+                } else {
+                    // Deselect category
+                    this.classList.remove('selected');
+                    selectedCount--;
+                }
+
+                // Disable further selections if max is reached
+                if (selectedCount === maxSelections) {
+                    boxes.forEach(box => {
+                        if (!box.classList.contains('selected')) {
+                            box.classList.add('disabled');
+                        }
+                    });
+                } else {
+                    boxes.forEach(box => {
+                        box.classList.remove('disabled');
+                    });
+                }
+
+                // Update the tally
+                updateTally();
+            });
+        });
+
+        // Update tally and button state
+        function updateTally() {
+            tally.textContent = `Select ${maxSelections - selectedCount} more`;
+            beginGameButton.disabled = (selectedCount !== maxSelections);
+        }
+
+        // Function to randomly select remaining categories
+        randomButton.addEventListener('click', () => {
+            const remainingSelections = maxSelections - selectedCount;
+            if (remainingSelections <= 0) return; // No need to randomly select if already 6
+
+            let unselectedBoxes = Array.from(boxes).filter(box => !box.classList.contains('selected'));
+            unselectedBoxes.sort(() => 0.5 - Math.random()); // Shuffle categories
+            unselectedBoxes.slice(0, remainingSelections).forEach(box => {
+                box.classList.add('selected');
+                selectedCount++;
+            });
+            updateTally();
+            boxes.forEach(box => {
+                if (!box.classList.contains('selected')) {
+                    box.classList.add('disabled');
+                }
+            });
+        });
+
+        // Begin Game Button functionality
+        beginGameButton.addEventListener('click', function () {
+            alert('Game is starting!');
+        });
+
+        // Initial tally update
+        updateTally();
+    </script>
+</body>
+</html>

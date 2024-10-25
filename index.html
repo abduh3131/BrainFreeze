@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Freeze Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Logo Section -->
+        <div class="logo-container">
+            <img  stylesrc="BFlogo.jpg" alt="Brain Freeze Logo" class="logo">
+        </div>
+
+        <!-- Team Input Section -->
+        <div class="team-input-container">
+            <h2>Enter Team Names</h2>
+            <div class="team-inputs">
+                <input type="text" placeholder="Team 1 Name" class="team-name" id="team1">
+                <input type="text" placeholder="Team 2 Name" class="team-name" id="team2">
+            </div>
+        </div>
+
+        <!-- Player Number Section -->
+        <div class="player-input-container">
+            <h2>Number of Players</h2>
+            <div class="player-count">
+                <button id="decreasePlayers" class="counter-btn">-</button>
+                <input type="number" id="playerCount" value="2" min="2" max="10" readonly>
+                <button id="increasePlayers" class="counter-btn">+</button>
+            </div>
+        </div>
+
+        <!-- Begin Game Button -->
+        <div class="start-game">
+            <button id="beginGame">Begin Game</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

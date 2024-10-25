@@ -1,0 +1,102 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #FFD700; /* Match with logo theme */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container styling */
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Logo styling */
+.logo-container {
+    margin-bottom: 20px;
+}
+
+.logo {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Team Input Styling */
+.team-input-container {
+    margin-bottom: 20px;
+}
+
+.team-inputs {
+    display: flex;
+    justify-content: space-between;
+}
+
+.team-name {
+    width: 45%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+/* Player Counter Styling */
+.player-input-container {
+    margin-bottom: 20px;
+}
+
+.player-count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.counter-btn {
+    font-size: 24px;
+    background-color: #00BFFF; /* Ice Blue to match the theme */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px;
+}
+
+#playerCount {
+    width: 60px;
+    text-align: center;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Start Game Button */
+.start-game button {
+    width: 100%;
+    padding: 15px;
+    background-color: #00BFFF;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.start-game button:hover {
+    background-color: #1E90FF;
+}
