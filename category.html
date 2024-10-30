@@ -194,12 +194,9 @@
             </div>
         </div>
 
-        <!-- Begin Game Button -->
         <div class="start-game">
             <button id="beginGame" disabled>Begin Game</button>
         </div>
-
-        <!-- Random Selection Button -->
         <div class="start-game">
             <button id="randomSelection" class="random-button">Random Select Remaining</button>
         </div>
@@ -208,16 +205,12 @@
     <script>
         let selectedCount = 0;
         const maxSelections = 6;
-        const beginGameButton = document.getElementById('beginGame');
-        const randomButton = document.getElementById('randomSelection');
-
         const selectedCategories = [];
+        const beginGameButton = document.getElementById('beginGame');
         const team1Input = document.getElementById('team1');
         const team2Input = document.getElementById('team2');
 
-        // Add click event listener to all category boxes
-        const boxes = document.querySelectorAll('.category-box');
-        boxes.forEach(box => {
+        document.querySelectorAll('.category-box').forEach(box => {
             box.addEventListener('click', function () {
                 const category = this.querySelector('span').textContent;
 
@@ -229,48 +222,35 @@
                     }
                 } else {
                     this.classList.remove('selected');
-                    const index = selectedCategories.indexOf(category);
-                    if (index > -1) {
-                        selectedCategories.splice(index, 1);
-                    }
+                    selectedCategories.splice(selectedCategories.indexOf(category), 1);
                     selectedCount--;
                 }
-
                 beginGameButton.disabled = selectedCount !== maxSelections;
             });
         });
 
-        // Random Selection Button to fill remaining categories
-        randomButton.addEventListener('click', () => {
-            const remainingSelections = maxSelections - selectedCount;
-            if (remainingSelections <= 0) return; // No need to randomly select if already 6
+        document.getElementById('randomSelection').addEventListener('click', () => {
+            let unselectedBoxes = Array.from(document.querySelectorAll('.category-box'))
+                .filter(box => !box.classList.contains('selected'))
+                .sort(() => Math.random() - 0.5)
+                .slice(0, maxSelections - selectedCount);
 
-            let unselectedBoxes = Array.from(boxes).filter(box => !box.classList.contains('selected'));
-            unselectedBoxes.sort(() => 0.5 - Math.random()); // Shuffle categories
-            unselectedBoxes.slice(0, remainingSelections).forEach(box => {
+            unselectedBoxes.forEach(box => {
                 box.classList.add('selected');
                 selectedCategories.push(box.querySelector('span').textContent);
                 selectedCount++;
             });
-
             beginGameButton.disabled = selectedCount !== maxSelections;
         });
 
-        // When "Begin Game" is clicked, store the data and navigate to the lobby page
-        beginGameButton.addEventListener('click', function () {
-            // Save the selected categories and teams in local storage
-            const team1 = team1Input.value || 'Team 1';
-            const team2 = team2Input.value || 'Team 2';
+        beginGameButton.addEventListener('click', () => {
             const teams = [
-                { name: team1, score: 0 },
-                { name: team2, score: 0 }
+                { name: team1Input.value || 'Team 1', score: 0 },
+                { name: team2Input.value || 'Team 2', score: 0 }
             ];
-
             localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
             localStorage.setItem('teams', JSON.stringify(teams));
-            localStorage.setItem('currentTeamIndex', 0); // Start with team 1's turn
-
-            // Navigate to the lobby page
+            localStorage.setItem('currentTeamIndex', 0);
             window.location.href = 'lobby.html';
         });
     </script>
