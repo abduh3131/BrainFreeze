@@ -38,66 +38,81 @@
             margin-top: 20px;
         }
     </style>
-</head>
-<body>
-
+</head><body>
     <div class="container">
         <h1>Question</h1>
-
-        <!-- Question Text -->
-        <div class="question" id="question-text">
-            <!-- The question from the question bank will be displayed here -->
-        </div>
-
-        <!-- Error Message -->
+        <div class="question" id="question-text"></div>
+        <div class="media" id="media-display"></div>
+        <button id="show-result" onclick="showAnswer()">Show Answer</button>
+        <div class="answer" id="answer-text" style="display:none;"></div>
         <div id="error-message" class="error-message"></div>
-
-        <!-- Button to move to result page -->
-        <button id="show-result" onclick="goToResultPage()">Show Result</button>
     </div>
 
     <script>
-        // URL of your JSON file, assumed to be in the same folder as this HTML file
-        const jsonUrl = './questions.json'; 
-
-        // Retrieve category and value from localStorage
-        const category = localStorage.getItem('selectedCategory');
-        const value = localStorage.getItem('selectedValue');
-
-        // Format the key to match the structure in the JSON file
-        const key = `${category.toLowerCase()}${value}`;
-
-        // Fetch the JSON file from the same folder
         async function loadQuestion() {
+            const category = localStorage.getItem('selectedCategory');
+            const value = localStorage.getItem('questionValue');
+            const fileName = `${category}${value}.txt`;
             const errorMessage = document.getElementById('error-message');
-            try {
-                const response = await fetch(jsonUrl);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const questionBank = await response.json();
 
-                // Check if the key exists in the JSON and load a random question
-                if (questionBank[key] && questionBank[key].length > 0) {
-                    const randomQuestion = questionBank[key][Math.floor(Math.random() * questionBank[key].length)];
-                    document.getElementById('question-text').textContent = randomQuestion;
-                } else {
-                    document.getElementById('question-text').textContent = 'No questions available for this category and value.';
-                }
+            try {
+                const response = await fetch(fileName);
+                if (!response.ok) throw new Error('File not found');
+                
+                const questions = await response.text();
+                const lines = questions.split('\n').filter(line => line.trim());
+
+                const randomLine = lines[Math.floor(Math.random() * lines.length)];
+                const [id, question, answer] = parseQuestionFormat(randomLine);
+
+                displayQuestion(question);
+                localStorage.setItem('currentAnswer', answer);
+                loadMedia(id);
             } catch (error) {
                 console.error("Error loading question:", error);
-                errorMessage.textContent = `Error loading questions: ${error.message}`;
+                errorMessage.textContent = `Error: ${error.message}`;
             }
         }
 
-        // Call the function to load the question when the page loads
-        loadQuestion();
+        function parseQuestionFormat(line) {
+            const idMatch = line.match(/^(\d+\.?)\s+"([^"]+)"\s+\(([^)]+)\)/);
+            if (!idMatch) throw new Error("Incorrect format in question file");
 
-        // Function to navigate to result page
-        function goToResultPage() {
-            window.location.href = 'result.html';
+            const id = idMatch[1].replace(".", ""); // Get ID and remove period if exists
+            const question = idMatch[2];
+            const answer = idMatch[3];
+            return [id, question, answer];
         }
-    </script>
 
+        function displayQuestion(question) {
+            document.getElementById('question-text').textContent = question;
+        }
+
+        function loadMedia(id) {
+            const mediaDisplay = document.getElementById('media-display');
+            const isVideo = id.endsWith(".");
+            const mediaType = isVideo ? "video" : "img";
+            const extension = isVideo ? "mp4" : "jpg";
+            const mediaSrc = `${id}.${extension}`;
+
+            const mediaElement = document.createElement(mediaType);
+            mediaElement.src = mediaSrc;
+            mediaElement.alt = `Media for question ${id}`;
+            mediaElement.width = 300;
+
+            if (isVideo) mediaElement.controls = true;
+            mediaDisplay.innerHTML = '';  // Clear previous media
+            mediaDisplay.appendChild(mediaElement);
+        }
+
+        function showAnswer() {
+            const answer = localStorage.getItem('currentAnswer');
+            const answerText = document.getElementById('answer-text');
+            answerText.textContent = `Answer: ${answer}`;
+            answerText.style.display = 'block';
+        }
+
+        loadQuestion();
+    </script>
 </body>
 </html>
