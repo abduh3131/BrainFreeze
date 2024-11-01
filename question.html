@@ -90,24 +90,36 @@
 
     function loadMedia(id) {
     const mediaDisplay = document.getElementById('media-display');
-    
-    // Check if the ID ends with a period to determine if it should be a video
-    const isVideo = id.slice(-1) === "."; // Check if last character is a period
-    const mediaId = isVideo ? id.slice(0, -1) : id; // Remove the trailing period if it’s a video
-    const extension = isVideo ? "mp4" : "jpg";
-    const mediaSrc = `${mediaId}.${extension}`;
+    let mediaType;
+    let extension;
 
-    console.log("Loading media from:", mediaSrc); // Debug log to confirm path
+    // Check if the ID ends with a period to determine if it's a video
+    if (id.endsWith(".")) {
+        mediaType = "video";
+        extension = "mp4";
+        id = id.slice(0, -1); // Remove the trailing period
+    } else {
+        mediaType = "img";
+        extension = "jpg";
+    }
 
-    const mediaElement = document.createElement(isVideo ? "video" : "img");
+    const mediaSrc = `${id}.${extension}`;
+    console.log("Loading media from:", mediaSrc); // Debug line to verify path
+
+    // Create the appropriate media element
+    const mediaElement = document.createElement(mediaType);
     mediaElement.src = mediaSrc;
     mediaElement.alt = `Media for question ${id}`;
     mediaElement.width = 300;
 
-    if (isVideo) mediaElement.controls = true;
-    mediaDisplay.innerHTML = ''; // Clear previous media
+    if (mediaType === "video") {
+        mediaElement.controls = true;
+    }
+
+    mediaDisplay.innerHTML = ''; // Clear any previous media
     mediaDisplay.appendChild(mediaElement);
 }
+
 
 
 
