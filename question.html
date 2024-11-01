@@ -88,9 +88,9 @@
             document.getElementById('question-text').textContent = question;
         }
 
-       function loadMedia(id) {
+      function loadMedia(id) {
     const mediaDisplay = document.getElementById('media-display');
-    const isVideo = id.endsWith(".");
+    const isVideo = id.includes("."); // Correctly detect if the ID should load a video
     const mediaType = isVideo ? "video" : "img";
     const extension = isVideo ? "mp4" : "jpg";
     const mediaSrc = `${id}.${extension}`;
