@@ -88,22 +88,25 @@
             document.getElementById('question-text').textContent = question;
         }
 
-        function loadMedia(id) {
-            const mediaDisplay = document.getElementById('media-display');
-            const isVideo = id.endsWith(".");
-            const mediaType = isVideo ? "video" : "img";
-            const extension = isVideo ? "mp4" : "jpg";
-            const mediaSrc = `${id}.${extension}`;
+       function loadMedia(id) {
+    const mediaDisplay = document.getElementById('media-display');
+    const isVideo = id.endsWith(".");
+    const mediaType = isVideo ? "video" : "img";
+    const extension = isVideo ? "mp4" : "jpg";
+    const mediaSrc = `${id}.${extension}`;
 
-            const mediaElement = document.createElement(mediaType);
-            mediaElement.src = mediaSrc;
-            mediaElement.alt = `Media for question ${id}`;
-            mediaElement.width = 300;
+    console.log("Loading media from:", mediaSrc); // Debug line
 
-            if (isVideo) mediaElement.controls = true;
-            mediaDisplay.innerHTML = '';  // Clear previous media
-            mediaDisplay.appendChild(mediaElement);
-        }
+    const mediaElement = document.createElement(mediaType);
+    mediaElement.src = mediaSrc;
+    mediaElement.alt = `Media for question ${id}`;
+    mediaElement.width = 300;
+
+    if (isVideo) mediaElement.controls = true;
+    mediaDisplay.innerHTML = '';  // Clear previous media
+    mediaDisplay.appendChild(mediaElement);
+}
+
 
         function showAnswer() {
             const answer = localStorage.getItem('currentAnswer');
