@@ -88,14 +88,16 @@
             document.getElementById('question-text').textContent = question;
         }
 
-     function loadMedia(id) {
+    function loadMedia(id) {
     const mediaDisplay = document.getElementById('media-display');
-    const isVideo = id.endsWith("."); // Correctly detect if the ID indicates a video file
-    const cleanedId = id.replace(".", ""); // Remove the period for file naming
+    
+    // Check if the ID ends with a period to determine if it should be a video
+    const isVideo = id.slice(-1) === "."; // Check if last character is a period
+    const mediaId = isVideo ? id.slice(0, -1) : id; // Remove the trailing period if it’s a video
     const extension = isVideo ? "mp4" : "jpg";
-    const mediaSrc = `${cleanedId}.${extension}`;
+    const mediaSrc = `${mediaId}.${extension}`;
 
-    console.log("Loading media from:", mediaSrc); // Debug line
+    console.log("Loading media from:", mediaSrc); // Debug log to confirm path
 
     const mediaElement = document.createElement(isVideo ? "video" : "img");
     mediaElement.src = mediaSrc;
@@ -103,7 +105,7 @@
     mediaElement.width = 300;
 
     if (isVideo) mediaElement.controls = true;
-    mediaDisplay.innerHTML = ''; // Clear any previous media
+    mediaDisplay.innerHTML = ''; // Clear previous media
     mediaDisplay.appendChild(mediaElement);
 }
 
