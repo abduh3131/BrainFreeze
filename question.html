@@ -38,17 +38,19 @@
             margin-top: 20px;
         }
     </style>
-</head><body>
+</head>
+<body>
     <div class="container">
         <h1>Question</h1>
         <div class="question" id="question-text"></div>
         <div class="media" id="media-display"></div>
         <button id="show-result" onclick="showAnswer()">Show Answer</button>
-        <div class="answer" id="answer-text" style="display:none;"></div>
+        <div id="answer-text" class="answer"></div>
         <div id="error-message" class="error-message"></div>
     </div>
 
     <script>
+        // Load and display a random question and associated media
         async function loadQuestion() {
             const category = localStorage.getItem('selectedCategory');
             const value = localStorage.getItem('questionValue');
@@ -57,16 +59,20 @@
 
             try {
                 const response = await fetch(fileName);
-                if (!response.ok) throw new Error('File not found');
-                
+                if (!response.ok) throw new Error('Question file not found');
+
                 const questions = await response.text();
                 const lines = questions.split('\n').filter(line => line.trim());
 
+                // Select a random question line and parse it
                 const randomLine = lines[Math.floor(Math.random() * lines.length)];
                 const [id, question, answer] = parseQuestionFormat(randomLine);
 
+                // Display the question and save the answer for later use
                 displayQuestion(question);
                 localStorage.setItem('currentAnswer', answer);
+
+                // Load the associated media
                 loadMedia(id);
             } catch (error) {
                 console.error("Error loading question:", error);
@@ -74,20 +80,23 @@
             }
         }
 
+        // Parse the question format "id "question?" (answer)"
         function parseQuestionFormat(line) {
-            const idMatch = line.match(/^(\d+\.?)\s+"([^"]+)"\s+\(([^)]+)\)/);
-            if (!idMatch) throw new Error("Incorrect format in question file");
+            const match = line.match(/^(\d+\.?)\s+"([^"]+)"\s+\(([^)]+)\)$/);
+            if (!match) throw new Error("Invalid question format");
 
-            const id = idMatch[1].replace(".", ""); // Get ID and remove period if exists
-            const question = idMatch[2];
-            const answer = idMatch[3];
+            const id = match[1].replace(".", ""); // Remove period from id if present
+            const question = match[2];
+            const answer = match[3];
             return [id, question, answer];
         }
 
+        // Display the parsed question
         function displayQuestion(question) {
             document.getElementById('question-text').textContent = question;
         }
 
+        // Load and display media based on the question ID
         function loadMedia(id) {
             const mediaDisplay = document.getElementById('media-display');
             const isVideo = id.endsWith(".");
@@ -95,16 +104,19 @@
             const extension = isVideo ? "mp4" : "jpg";
             const mediaSrc = `${id}.${extension}`;
 
+            // Create and display the media element
             const mediaElement = document.createElement(mediaType);
             mediaElement.src = mediaSrc;
             mediaElement.alt = `Media for question ${id}`;
             mediaElement.width = 300;
 
             if (isVideo) mediaElement.controls = true;
-            mediaDisplay.innerHTML = '';  // Clear previous media
+
+            mediaDisplay.innerHTML = '';  // Clear any previous media
             mediaDisplay.appendChild(mediaElement);
         }
 
+        // Show the answer when the "Show Answer" button is clicked
         function showAnswer() {
             const answer = localStorage.getItem('currentAnswer');
             const answerText = document.getElementById('answer-text');
@@ -112,6 +124,7 @@
             answerText.style.display = 'block';
         }
 
+        // Load the question and media on page load
         loadQuestion();
     </script>
 </body>
