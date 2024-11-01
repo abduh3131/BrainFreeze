@@ -177,16 +177,17 @@
                 categoryLabel.textContent = category;
 
                 const questionContainer = document.createElement('div');
-                questionValues.forEach(value => {
+                for (let i = 1; i <= 6; i++) {
                     const questionButton = document.createElement('button');
                     questionButton.classList.add('question-button');
+                    const value = questionValues[Math.floor((i - 1) / 2)];
                     questionButton.textContent = `${value}`;
 
                     // Question click event to take user to the question page
                     questionButton.addEventListener('click', () => goToQuestionPage(category, value));
 
                     questionContainer.appendChild(questionButton);
-                });
+                }
 
                 categoryBox.appendChild(categoryImg);
                 categoryBox.appendChild(categoryLabel);
@@ -199,7 +200,7 @@
         function goToQuestionPage(category, value) {
             // Save the selected category and value in localStorage
             localStorage.setItem('selectedCategory', category);
-            localStorage.setItem('selectedValue', value);
+            localStorage.setItem('questionValue', value);  // This should be 'questionValue' as used in question.html
 
             // Redirect to the question page
             window.location.href = 'question.html';
