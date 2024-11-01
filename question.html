@@ -88,24 +88,25 @@
             document.getElementById('question-text').textContent = question;
         }
 
-      function loadMedia(id) {
+     function loadMedia(id) {
     const mediaDisplay = document.getElementById('media-display');
-    const isVideo = id.includes("."); // Correctly detect if the ID should load a video
-    const mediaType = isVideo ? "video" : "img";
+    const isVideo = id.endsWith("."); // Correctly detect if the ID indicates a video file
+    const cleanedId = id.replace(".", ""); // Remove the period for file naming
     const extension = isVideo ? "mp4" : "jpg";
-    const mediaSrc = `${id}.${extension}`;
+    const mediaSrc = `${cleanedId}.${extension}`;
 
     console.log("Loading media from:", mediaSrc); // Debug line
 
-    const mediaElement = document.createElement(mediaType);
+    const mediaElement = document.createElement(isVideo ? "video" : "img");
     mediaElement.src = mediaSrc;
     mediaElement.alt = `Media for question ${id}`;
     mediaElement.width = 300;
 
     if (isVideo) mediaElement.controls = true;
-    mediaDisplay.innerHTML = '';  // Clear previous media
+    mediaDisplay.innerHTML = ''; // Clear any previous media
     mediaDisplay.appendChild(mediaElement);
 }
+
 
 
         function showAnswer() {
